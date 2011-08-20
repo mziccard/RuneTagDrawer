@@ -19,8 +19,8 @@ class RuneTagInfo(Window):
         panel.SetSize((220,595))
         
         title = "Tag Name"
-        position = "- Position"
-        size = "- Size"
+        position = "- Rune position"
+        size = "- Rune size"
         
         italic = wx.Font(10, wx.NORMAL, wx.ITALIC, wx.NORMAL)
         bold = wx.Font(10, wx.NORMAL, wx.NORMAL, wx.BOLD)
@@ -41,11 +41,10 @@ class RuneTagInfo(Window):
     def updatePosition(self, x, y):
         xCm=round(x*Configuration.REAL_RATIO,4)
         yCm=round(y*Configuration.REAL_RATIO,4)
-        stringPosition = "cm:\n"+str(xCm)+", "+str(yCm)+"\npixel:\n"+str(x)+", "+str(y);
+        stringPosition = "cm:\n"+str(xCm)+", "+str(yCm)+"\npixel:\n"+str(round(x,0))+", "+str(round(y,0));
         self.position.SetLabel(stringPosition)
         
-    def updateSize(self, x, y):
-        xCm=round(x*Configuration.REAL_RATIO,4)
-        yCm=round(y*Configuration.REAL_RATIO,4)
-        stringSize = "cm:\n"+str(xCm)+", "+str(yCm)+"\npixel:\n"+str(int(x))+", "+str(int(y));
+    def updateRadius(self, radius):
+        radiusCm=round(radius*Configuration.REAL_RATIO,4)
+        stringSize = "cm:\n"+str(radiusCm)+"\npixel:\n"+str(round(radius,0))
         self.size.SetLabel(stringSize)

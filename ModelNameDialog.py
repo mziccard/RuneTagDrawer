@@ -17,7 +17,7 @@ class ModelNameDialog(wx.Dialog):
         '''
         Constructor
         '''
-        wx.Dialog.__init__(self, parent, id, title, size=(250, 120))
+        wx.Dialog.__init__(self, parent, id, title, size=(250, 160))
 
         panel = wx.Panel(self, -1)
         vbox = wx.BoxSizer(wx.VERTICAL)

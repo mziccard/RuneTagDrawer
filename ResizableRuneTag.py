@@ -7,6 +7,7 @@ import wx
 from DigitalRuneTag import DigitalRuneTag
 from PdfStructure import PdfStructure
 import Configuration
+import TagSizeDialog
 
 class ResizableRuneTag(wx.Window):
     
@@ -57,9 +58,16 @@ class ResizableRuneTag(wx.Window):
         self.bitmap.Bind(wx.EVT_MOTION, self.OnMotionMove)
         
     def UpdateInfo(self):
+        
         self.info.updateTitle(self.digitalRuneTag.name)
-        self.info.updatePosition(self.digitalRuneTag.x, self.digitalRuneTag.y)
-        self.info.updateSize(self.digitalRuneTag.size, self.digitalRuneTag.size)
+        self.info.updatePosition(self.digitalRuneTag.x+(self.digitalRuneTag.size/2), self.digitalRuneTag.y+(self.digitalRuneTag.size/2))
+        originalSizeCm = self.digitalRuneTag.defaultSize*Configuration.REAL_RATIO
+        sizeCm = self.digitalRuneTag.size*Configuration.REAL_RATIO
+        spaceCm = 1/originalSizeCm*sizeCm
+        radiusCm = (sizeCm - spaceCm)/2
+        radius = radiusCm/Configuration.REAL_RATIO
+        
+        self.info.updateRadius(radius)
         
     def OnStartResize(self, evt):
         self.oldSize = self.GetSize()
@@ -76,10 +84,64 @@ class ResizableRuneTag(wx.Window):
         
     def OnRightDown(self, evt):
             popup = wx.Menu()
-            item = wx.MenuItem(popup, wx.NewId(), 'Elimina')
-            popup.AppendItem(item)
-            popup.Bind(wx.EVT_MENU, self.DeleteMarker, id=item.GetId())
+            deleteItem = wx.MenuItem(popup, wx.NewId(), 'Delete')
+            sizeItem = wx.MenuItem(popup, wx.NewId(), "Change radius and position")
+            popup.AppendItem(sizeItem)
+            popup.AppendItem(deleteItem)
+
+            
+            popup.Bind(wx.EVT_MENU, self.DeleteMarker, id=deleteItem.GetId())
+            popup.Bind(wx.EVT_MENU, self.ChangeSize, id=sizeItem.GetId())
             self.PopupMenu(popup, evt.GetPosition())
+    
+    def ChangeSize(self, evt):
+        xCm = (self.digitalRuneTag.x+(self.digitalRuneTag.size/2))*Configuration.REAL_RATIO
+        yCm = (self.digitalRuneTag.y+(self.digitalRuneTag.size/2))*Configuration.REAL_RATIO
+        originalSizeCm = self.digitalRuneTag.defaultSize*Configuration.REAL_RATIO
+        sizeCm = self.digitalRuneTag.size*Configuration.REAL_RATIO
+        spaceCm = 1/originalSizeCm*sizeCm
+        radiusCm = (sizeCm - spaceCm)/2
+        dlg = TagSizeDialog.TagSizeDialog(self, -1, "Change size and position", self, xCm, yCm, radiusCm)
+        dlg.ShowModal()
+        dlg.Destroy()
+    
+    def UpdateSize(self, centerX, centerY, radiusCm):
+        diameterCm = radiusCm*2
+        originalSizeCm = self.digitalRuneTag.defaultSize*Configuration.REAL_RATIO
+        print originalSizeCm
+        extraSpaceCm = 1/(originalSizeCm-1) * diameterCm
+        print extraSpaceCm
+        size = (diameterCm + extraSpaceCm)/Configuration.REAL_RATIO
+        print size
+        oldSize = self.digitalRuneTag.size
+        self.digitalRuneTag.size = size
+        scaledImage = self.image.Scale(size, size,wx.IMAGE_QUALITY_NORMAL)
+        bmp = scaledImage.ConvertToBitmap()
+        scaledImage.Destroy()
+
+        self.bitmap.Destroy()
+        self.bitmap = wx.StaticBitmap(self, wx.ID_ANY, bmp, (5,5), (size, size))
+        self.button.SetPosition((size+5, size+5))
+        self.SetSize((size+10, size+10))
+        self.bitmap.Bind(wx.EVT_LEFT_DOWN, self.OnStartMove)
+        self.bitmap.Bind(wx.EVT_RIGHT_DOWN, self.OnRightDown)
+        self.bitmap.Bind(wx.EVT_LEFT_UP, self.OnStopMove)
+        self.bitmap.Bind(wx.EVT_MOTION, self.OnMotionMove)
+        
+        xPixel = centerX/Configuration.REAL_RATIO
+        yPixel = centerY/Configuration.REAL_RATIO
+        
+        print xPixel*Configuration.REAL_RATIO
+        
+        xPixel = xPixel - size/2
+        yPixel = yPixel - size/2
+        
+        self.SetPosition((xPixel, yPixel))
+        self.digitalRuneTag.x = xPixel
+        self.digitalRuneTag.y = yPixel
+        self.UpdateInfo()
+        
+         
         
     def DeleteMarker(self, evt):
         PdfStructure.RemoveMarker(self.digitalRuneTag.name)
