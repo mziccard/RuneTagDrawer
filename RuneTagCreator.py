@@ -51,8 +51,6 @@ class RuneTagCreator(object):
         if len(lines) is 0:
             raise Exception("ERROR 6: formato non riconosciuto")
         
-        print "SIZE:"
-        print size
         c2 = renderPM.PMCanvas((size/10*2+1)*cm, (size/10*2+1)*cm)
         c2.setFillColor(black)
         
@@ -65,10 +63,8 @@ class RuneTagCreator(object):
             raise Exception("ERROR 8: formato non riconosciuto")
         
         for i in [0,1,2,3]:
-            print lines.pop(0)
             if len(lines) is 0:
                 raise Exception("ERROR 9: formato non riconosciuto")
-        print len(lines)
         ellipsesString = ""
         for line in lines:
             ellipsesString+=line+"\n"

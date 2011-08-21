@@ -4,7 +4,6 @@ Created on 19/ago/2011
 @author: Marco
 '''
 import wx
-from PdfStructure import PdfStructure
 
 class TagSizeDialog(wx.Dialog):
     '''
@@ -81,7 +80,7 @@ class TagSizeDialog(wx.Dialog):
             dlg2.Destroy()
         else:
             self.resizableRuneTag.UpdateSize(x, y, radius)
-            print "everything fine"
+            self.Destroy()
         
     def Close(self, evt):
         self.Destroy()

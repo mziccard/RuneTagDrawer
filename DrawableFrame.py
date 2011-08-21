@@ -13,7 +13,6 @@ class DrawableFrame(wx.Window):
     '''
 
     def __init__(self, parent, height, width):
-        print "CALLED"
         wx.Window.__init__(self, parent)
         self.SetSize((height, width))
         self.SetMinSize((height, width))

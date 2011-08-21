@@ -37,9 +37,7 @@ class ModelsCache(object):
         
             model = DigitalModel.DigitalModel(modelName, tagNames, tagPositions, tagSizes, tagDefaultSizes)
             self.models.append(model)
-        
-        print self.models        
-
+            in_file.close()
         
     def AddModel(self, modelName, tagNames, tagPositions, tagSizes, tagDefaultSizes):
         model = DigitalModel.DigitalModel(modelName, tagNames, tagPositions, tagSizes, tagDefaultSizes)

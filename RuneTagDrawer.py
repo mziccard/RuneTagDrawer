@@ -14,6 +14,7 @@ class RuneTagDrawer(wx.Frame):
     def __init__(self):
         
         wx.Frame.__init__(self, None)
+        self.SetTitle("Rune tag drawer")
         
         self.sizer = wx.BoxSizer()
         panel = wx.Panel(self, -1)
@@ -91,7 +92,6 @@ class RuneTagDrawer(wx.Frame):
             self.CreateMenuModel()       
             
     def OnSaveModel(self, event):
-        print "called"
         dlg = ModelNameDialog.ModelNameDialog(self, -1, "Save as model")
         dlg.ShowModal()
         dlg.Destroy()
@@ -105,7 +105,6 @@ class RuneTagDrawer(wx.Frame):
         if dlg.ShowModal() == wx.ID_OK:
                 inputFile = open(dlg.GetPath(),"r")
                 tagDefinition = inputFile.read()
-                print tagDefinition
                 try:
                     (runeTagName, runeTagSize) = RuneTagCreator.addRuneTag(tagDefinition)
                     self.runeTagList.AddGraphicRuneTag(runeTagName, runeTagSize)
