@@ -14,9 +14,9 @@ class RuneTagInfo(Window):
 
     def __init__(self, parent):
         Window.__init__(self, parent, -1)
-        panel = Panel(self, -1, style=wx.SUNKEN_BORDER)
-        panel.SetPosition((5,5))
-        panel.SetSize((220,595))
+        self.panel = Panel(self, -1, style=wx.SUNKEN_BORDER)
+        self.panel.SetPosition((5,5))
+        self.panel.SetSize((220,595))
         
         title = "Tag Name"
         position = "- Rune position"
@@ -24,16 +24,21 @@ class RuneTagInfo(Window):
         
         italic = wx.Font(10, wx.NORMAL, wx.ITALIC, wx.NORMAL)
         bold = wx.Font(10, wx.NORMAL, wx.NORMAL, wx.BOLD)
-        self.title = wx.StaticText(panel, -1, title, (10,15), style=wx.ALIGN_CENTRE)
+        self.title = wx.StaticText(self.panel, -1, title, (10,15), style=wx.ALIGN_CENTRE)
         self.title.SetFont(bold)
         
-        wx.StaticText(panel, -1, position, (10,45), style=wx.ALIGN_CENTRE)
-        self.position = wx.StaticText(panel, -1, "", (45,65), style=wx.ALIGN_LEFT)
+        wx.StaticText(self.panel, -1, position, (10,45), style=wx.ALIGN_CENTRE)
+        self.position = wx.StaticText(self.panel, -1, "", (45,65), style=wx.ALIGN_LEFT)
         self.position.SetFont(italic)
 
-        wx.StaticText(panel, -1, size, (10,145), style=wx.ALIGN_CENTRE)
-        self.size = wx.StaticText(panel, -1, "", (45,165), style=wx.ALIGN_LEFT)
-        self.size.SetFont(italic)        
+        wx.StaticText(self.panel, -1, size, (10,145), style=wx.ALIGN_CENTRE)
+        self.size = wx.StaticText(self.panel, -1, "", (45,165), style=wx.ALIGN_LEFT)
+        self.size.SetFont(italic)      
+        
+        error = wx.Font(9, wx.NORMAL, wx.NORMAL, wx.NORMAL)
+        self.error = wx.StaticText(self.panel, -1, "", (3, 520), style=wx.ALIGN_CENTRE)
+        self.error.SetForegroundColour(wx.RED)
+        self.error.SetFont(error)
 
     def updateTitle(self, title):
         self.title.SetLabel(title)
@@ -48,3 +53,6 @@ class RuneTagInfo(Window):
         radiusCm=round(radius*Configuration.REAL_RATIO,4)
         stringSize = "cm:\n"+str(radiusCm)+"\npixel:\n"+str(round(radius,0))
         self.size.SetLabel(stringSize)
+        
+    def UpdateOverlap(self, error):
+        self.error.SetLabel(error)

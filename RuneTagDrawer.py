@@ -15,13 +15,15 @@ class RuneTagDrawer(wx.Frame):
         
         wx.Frame.__init__(self, None)
         self.SetTitle("Rune tag drawer")
+        self.CreateStatusBar()
+        self.SetStatusText("This is the statusbar")
         
         self.sizer = wx.BoxSizer()
         panel = wx.Panel(self, -1)
-        panel.SetSize((800,630))
-        panel.SetMinSize((800,630))
-        self.SetMinSize((800,630))
-        self.SetMaxSize((800,630))
+        panel.SetSize((800,620))
+        panel.SetMinSize((800,620))
+        self.SetMinSize((800,620))
+        self.SetMaxSize((800,620))
         self.Fit()
         
         self.drawableFrame = DrawableFrame.DrawableFrame(panel, 424, 600)                       
