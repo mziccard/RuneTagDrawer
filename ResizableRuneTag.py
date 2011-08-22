@@ -16,7 +16,6 @@ class ResizableRuneTag(wx.Window):
     
     def __init__(self, parent, tagName, size, position, originalSize, info):
         wx.Window.__init__(self, parent, -1, position)
-        #self.SetBackgroundColour(wx.Colour(100, 100, 200))
         self.info = info
         self.digitalRuneTag = DigitalRuneTag(tagName, position[0]+5, position[1]+5, size, originalSize)
         PdfStructure.AddMarker(self.digitalRuneTag)
@@ -45,7 +44,6 @@ class ResizableRuneTag(wx.Window):
         self.button.SetSize(wx.Size(5, 5)) 
         self.button.Bind(wx.EVT_LEFT_DOWN, self.OnStartResize)
         self.button.Bind(wx.EVT_LEFT_UP, self.OnEndResize)
-        #self.button.Bind(wx.EVT_MOTION, self.OnMotion)
         self.button.Bind(wx.EVT_MOTION, self.OnMotion)
         
     def makeImage(self, tagName, size):
@@ -92,8 +90,7 @@ class ResizableRuneTag(wx.Window):
             sizeItem = wx.MenuItem(popup, wx.NewId(), "Change radius and position")
             popup.AppendItem(sizeItem)
             popup.AppendItem(deleteItem)
-
-            
+           
             popup.Bind(wx.EVT_MENU, self.DeleteMarker, id=deleteItem.GetId())
             popup.Bind(wx.EVT_MENU, self.ChangeSize, id=sizeItem.GetId())
             self.PopupMenu(popup, evt.GetPosition())
@@ -112,11 +109,8 @@ class ResizableRuneTag(wx.Window):
     def UpdateSize(self, centerX, centerY, radiusCm):
         diameterCm = radiusCm*2
         originalSizeCm = self.digitalRuneTag.defaultSize*Configuration.REAL_RATIO
-        print originalSizeCm
         extraSpaceCm = 1/(originalSizeCm-1) * diameterCm
-        print extraSpaceCm
         size = (diameterCm + extraSpaceCm)/Configuration.REAL_RATIO
-        print size
         oldSize = self.digitalRuneTag.size
         self.digitalRuneTag.size = size
         scaledImage = self.image.Scale(size, size,wx.IMAGE_QUALITY_NORMAL)
@@ -135,18 +129,14 @@ class ResizableRuneTag(wx.Window):
         xPixel = centerX/Configuration.REAL_RATIO
         yPixel = centerY/Configuration.REAL_RATIO
         
-        print xPixel*Configuration.REAL_RATIO
-        
         xPixel = xPixel - size/2
         yPixel = yPixel - size/2
         
-        self.SetPosition((xPixel, yPixel))
+        self.SetPosition((xPixel-5, yPixel-5))
         self.digitalRuneTag.x = xPixel
         self.digitalRuneTag.y = yPixel
         self.UpdateInfo()
-        
-         
-        
+             
     def DeleteMarker(self, evt):
         PdfStructure.RemoveMarker(self.digitalRuneTag.name)
         self.Parent.resizableRuneTags.remove(self)
@@ -164,8 +154,6 @@ class ResizableRuneTag(wx.Window):
         self.UpdateInfo()
                                          
     def OnMotion(self, evt):
-                # I'm not sure which of these to call
-                # self.SetSize(wx.Size(distance.x, distance.y))
         if evt.Dragging():
             if self.mode is "resize":
                 distance = wx.GetMousePosition() - self.oldPosition
