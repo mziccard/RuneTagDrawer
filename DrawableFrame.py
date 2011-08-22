@@ -30,3 +30,30 @@ class DrawableFrame(wx.Window):
     def Clear(self):
         for resizableRuneTag in self.resizableRuneTags:
             resizableRuneTag.Destroy()
+    
+    def checkSpecificPosition(self, changedRuneTag):
+    	for tag in self.resizableRuneTags:
+    		if changedRuneTag != tag:
+    			radius1 = (tag.GetSize().GetHeight())/2 - 5
+    			radius2 = (changedRuneTag.GetSize().GetHeight())/2 - 5
+    			deltax = (tag.GetPosition().x + radius1) - (changedRuneTag.GetPosition().x + radius2)
+    			deltay = (tag.GetPosition().y + radius1) - (changedRuneTag.GetPosition().y + radius2)
+    			distance = (deltax*deltax + deltay*deltay)**(0.5)
+    			radiusSum = radius1 + radius2
+    			if distance <= radiusSum:
+    				print "In the output pdf file some slots of "+changedRuneTag.name+" RuneTag may laps over "+tag.name+"RuneTag"
+
+    def checkPosition(self):
+    	size = len(self.resizableRuneTags)
+    	for i in range(0, size):
+    		for j in range(i+1, size):
+    			tag1 = self.resizableRuneTags[i]
+    			tag2 = self.resizableRuneTags[j]
+    			radius1 = (tag1.GetSize().GetHeight())/2 - 5
+    			radius2 = (tag2.GetSize().GetHeight())/2 - 5
+    			deltax = (tag1.GetPosition().x + radius1) - (tag2.GetPosition().x + radius2)
+    			deltay = (tag1.GetPosition().y + radius1) - (tag2.GetPosition().y + radius2)
+    			distance = (deltax**2 + deltay**2)**(0.5)
+    			radiusSum = radius1 + radius2
+    			if distance <= radiusSum:
+    				print "In the output pdf file some slots of "+tag1.name+" RuneTag may laps over "+tag2.name+" RuneTag"

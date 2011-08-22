@@ -25,6 +25,8 @@ class ResizableRuneTag(wx.Window):
         self.makeButton(size)
         self.SetWindowStyleFlag(wx.BORDER_SUNKEN)
         self.SetCursor(wx.StockCursor(wx.CURSOR_RIGHT_ARROW))
+        self.parent = parent
+        self.name = tagName
        
     def OnStartMove(self, evt):
         self.position = evt.GetPosition()
@@ -68,6 +70,8 @@ class ResizableRuneTag(wx.Window):
         radius = radiusCm/Configuration.REAL_RATIO
         
         self.info.updateRadius(radius)
+        #self.parent.chechSpecificPosition(self)
+        self.parent.checkPosition()
         
     def OnStartResize(self, evt):
         self.oldSize = self.GetSize()
